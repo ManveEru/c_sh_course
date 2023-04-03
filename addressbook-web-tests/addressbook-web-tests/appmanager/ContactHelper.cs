@@ -25,6 +25,32 @@ namespace WebAddressbookTests
             return this;
         }
 
+        public ContactHelper Edit(ContactData contact, int row, int column)
+        {
+            InitContactModification(row, column);
+            FillContactForm(contact);
+            SubmitContactModification();
+            manager.Navigator.OpenHomePage();
+            return this;
+        }
+
+        public ContactHelper InitContactModification(int row, int column)
+        {
+            ContactTableLayout table = new ContactTableLayout();
+            driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + row + "]/td[" + column + "]/a/img")).Click();
+            if (column == table.Detail)
+            {
+                driver.FindElement(By.Name("modifiy")).Click();
+            }
+            return this;
+        }
+
+        public ContactHelper SubmitContactModification()
+        {
+            driver.FindElement(By.Name("update")).Click();
+            return this;
+        }
+
         public ContactHelper InitNewContactCreation()
         {
             driver.FindElement(By.LinkText("add new")).Click();
