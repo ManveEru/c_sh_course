@@ -34,6 +34,42 @@ namespace WebAddressbookTests
             return this;
         }
 
+        public ContactHelper Remove(bool all, int[] index)
+        {
+            if (all)
+            {
+                SelectContact();
+            }
+            else
+            {
+                SelectContact(index);
+            }
+            RemoveContact();
+            return this;
+        }
+
+        public ContactHelper RemoveContact()
+        {
+            driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
+            driver.SwitchTo().Alert().Accept();
+            return this;
+        }
+
+        public ContactHelper SelectContact(int[] index)
+        {
+            foreach (var i in index)
+            {
+                driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (i + 1) + "]/td[1]/input")).Click();
+            }
+            return this;
+        }
+
+        public ContactHelper SelectContact()
+        {
+            driver.FindElement(By.Id("MassCB")).Click();
+            return this;
+        }
+
         public ContactHelper InitContactModification(int row, int column)
         {
             ContactTableLayout table = new ContactTableLayout();
