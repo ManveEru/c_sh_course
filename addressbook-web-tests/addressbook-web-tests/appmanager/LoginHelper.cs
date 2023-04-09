@@ -18,24 +18,43 @@ namespace WebAddressbookTests
             this.baseURL = baseURL;
         }
 
-        public LoginHelper OpenLoginPage()
+        public void OpenLoginPage()
         {
             driver.Navigate().GoToUrl(baseURL + "/addressbook/");
-            return this;
         }
 
-        public LoginHelper Login(AccountData account)
+        public void Login(AccountData account)
         {
+            if (IsLoggedIn())
+            {
+                if (IsLoggedIn(account))
+                {
+                    return;
+                }
+                Logout();
+            }
             FillInput(By.Name("user"), account.Username);
             FillInput(By.Name("pass"), account.Password);
             driver.FindElement(By.XPath("//input[@value='Login']")).Click();
-            return this;
         }
 
-        public LoginHelper Logout()
+        public bool IsLoggedIn()
         {
-            driver.FindElement(By.LinkText("Logout")).Click();
-            return this;
+            return IsElementPresent(By.Name("logout"));
+        }
+
+        public bool IsLoggedIn(AccountData account)
+        {
+            return IsLoggedIn()
+                && driver.FindElement(By.Name("logout")).FindElement(By.TagName("b")).Text == "(" + account.Username + ")";
+        }
+
+        public void Logout()
+        {
+            if (IsLoggedIn())
+            {
+                driver.FindElement(By.LinkText("Logout")).Click();
+            }
         }
     }
 }
