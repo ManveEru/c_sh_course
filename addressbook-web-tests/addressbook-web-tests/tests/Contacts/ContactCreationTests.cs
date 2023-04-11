@@ -16,7 +16,7 @@ namespace WebAddressbookTests
             contact.LastName = "Surname";
 
             app.Contacts.Create(contact);
-            app.Navigator.OpenHomePage();
+            app.Navigator.OpenHomePageByLink();
         }
     }
 }

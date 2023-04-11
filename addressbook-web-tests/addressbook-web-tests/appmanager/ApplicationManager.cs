@@ -27,7 +27,7 @@ namespace WebAddressbookTests
             baseURL = "http://localhost";
             
             loginHelper = new LoginHelper(this, baseURL);
-            navHelper = new NavigationHelper(this);
+            navHelper = new NavigationHelper(this, baseURL);
             groupHelper = new GroupHelper(this);
             contactHelper = new ContactHelper(this);
         }

@@ -30,7 +30,7 @@ namespace WebAddressbookTests
             InitContactModification(row, column);
             FillContactForm(contact);
             SubmitContactModification();
-            manager.Navigator.OpenHomePage();
+            manager.Navigator.OpenHomePageByLink();
             return this;
         }
 
