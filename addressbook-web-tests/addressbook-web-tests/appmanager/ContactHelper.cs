@@ -22,11 +22,13 @@ namespace WebAddressbookTests
             InitNewContactCreation();
             FillContactForm(contact);
             SubmitContactCreate();
+            manager.Navigator.OpenHomePageByLink();
             return this;
         }
 
         public ContactHelper Edit(ContactData contact, int row, int column)
         {
+            PrepareToSelectContact();
             InitContactModification(row, column);
             FillContactForm(contact);
             SubmitContactModification();
@@ -36,6 +38,7 @@ namespace WebAddressbookTests
 
         public ContactHelper Remove(bool all, int[] index)
         {
+            PrepareToSelectContact();
             if (all)
             {
                 SelectContact();
@@ -46,6 +49,14 @@ namespace WebAddressbookTests
             }
             RemoveContact();
             return this;
+        }
+
+        private void PrepareToSelectContact()
+        {
+            if (!IsElementPresent(By.TagName("td")))
+            {
+                Create(new ContactData("Test"));
+            }
         }
 
         public ContactHelper RemoveContact()

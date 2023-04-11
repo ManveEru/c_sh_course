@@ -21,13 +21,13 @@ namespace WebAddressbookTests
         [Test]
         public void ContactModificationTest()
         {
-            app.Contacts.Edit(contact, 3, table.Detail);            
+            app.Contacts.Edit(contact, 2, table.Detail);            
         }
 
         [Test]
         public void ContactEditTest()
         {
-            app.Contacts.Edit(contact, 3, table.Edit);
+            app.Contacts.Edit(contact, 2, table.Edit);
         }
     }
 }
