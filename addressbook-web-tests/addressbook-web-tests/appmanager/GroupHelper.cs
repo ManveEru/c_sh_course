@@ -45,6 +45,16 @@ namespace WebAddressbookTests
             return this;
         }
 
+        public GroupHelper PrepareGroups(int index)
+        {
+            int difference = DifferenceGroups(index);
+
+
+            for (; difference < 0; difference++)
+                Create(new GroupData("Test"));
+            return this;
+        }
+
         public int DifferenceGroups(int count)
         {
             manager.Navigator.GoToGroupsPage();

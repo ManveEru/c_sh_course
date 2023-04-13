@@ -28,7 +28,6 @@ namespace WebAddressbookTests
 
         public ContactHelper Edit(ContactData contact, int row, int column)
         {
-            PrepareToSelectContact();
             InitContactModification(row, column);
             FillContactForm(contact);
             SubmitContactModification();
@@ -38,7 +37,6 @@ namespace WebAddressbookTests
 
         public ContactHelper Remove(bool all, int[] index)
         {
-            PrepareToSelectContact();
             if (all)
             {
                 SelectContact();
@@ -51,12 +49,19 @@ namespace WebAddressbookTests
             return this;
         }
 
-        private void PrepareToSelectContact()
+        public ContactHelper PrepareContacts(int index)
         {
-            if (!IsElementPresent(By.TagName("td")))
-            {
-                Create(new ContactData("Test"));
-            }
+            int difference = DifferenceContacts(index);
+
+            for (; difference < 0; difference++)
+                Create(new ContactData("Default"));
+            return this;
+        }
+
+        public int DifferenceContacts(int count)
+        {
+            manager.Navigator.GoToHomePage();
+            return driver.FindElement(By.XPath("//table[@id='maintable']/tbody")).FindElements(By.Name("selected[]")).Count - count;
         }
 
         public ContactHelper RemoveContact()

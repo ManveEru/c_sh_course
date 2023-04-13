@@ -14,13 +14,8 @@ namespace WebAddressbookTests
         public void GroupRemovalTest()
         {
             int[] removeList = {1, 3, 7};
-            int maxIndex = 7;
-            int difference = app.Groups.DifferenceGroups(maxIndex);
 
-
-            if (difference < 0)
-                for (; difference < 0; difference++)
-                    app.Groups.Create(new GroupData("Test"));
+            app.Groups.PrepareGroups(7);
             app.Groups.Remove(removeList);
         }
     }
