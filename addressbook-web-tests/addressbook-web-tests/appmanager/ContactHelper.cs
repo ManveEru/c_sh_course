@@ -49,6 +49,22 @@ namespace WebAddressbookTests
             return this;
         }
 
+        public List<ContactData> GetContactList()
+        {
+            List<ContactData> contacts = new List<ContactData>();
+            manager.Navigator.GoToHomePage();
+            int rowCount = driver.FindElements(By.XPath("//table[@id='maintable']/tbody/tr")).Count - 1;
+            
+            for (int i = 0; i < rowCount; i++)
+            {
+                string lastName = driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (i + 2) + "]/td[2]")).Text;
+                string firstName = driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (i + 2) + "]/td[3]")).Text;
+                contacts.Add(new ContactData(firstName));
+                contacts.Last().LastName = lastName;
+            }
+            return contacts;
+        }
+
         public ContactHelper PrepareContacts(int index)
         {
             int difference = DifferenceContacts(index);
@@ -75,7 +91,7 @@ namespace WebAddressbookTests
         {
             foreach (var i in index)
             {
-                driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (i + 1) + "]/td[1]/input")).Click();
+                driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (i + 2) + "]/td[1]/input")).Click();
             }
             return this;
         }
@@ -89,7 +105,7 @@ namespace WebAddressbookTests
         public ContactHelper InitContactModification(int row, int column)
         {
             ContactTableLayout table = new ContactTableLayout();
-            driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + row + "]/td[" + column + "]/a/img")).Click();
+            driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (row + 2) + "]/td[" + column + "]/a/img")).Click();
             if (column == table.Detail)
             {
                 driver.FindElement(By.Name("modifiy")).Click();
