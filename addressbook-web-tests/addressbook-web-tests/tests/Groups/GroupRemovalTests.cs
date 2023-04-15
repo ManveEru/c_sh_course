@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace WebAddressbookTests
@@ -13,10 +14,17 @@ namespace WebAddressbookTests
         [Test]
         public void GroupRemovalTest()
         {
-            int[] removeList = {1, 3, 7};
+            int[] removeList = {0};
 
-            app.Groups.PrepareGroups(7);
+            app.Groups.PrepareGroups(1);
+            List<GroupData> oldGroups = app.Groups.GetGroupList();
+
             app.Groups.Remove(removeList);
+
+            List<GroupData> newGroups = app.Groups.GetGroupList();
+            oldGroups.RemoveAt(0);
+
+            Assert.AreEqual(oldGroups, newGroups);
         }
     }
 }
