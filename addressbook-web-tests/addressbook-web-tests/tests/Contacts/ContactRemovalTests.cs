@@ -16,12 +16,18 @@ namespace WebAddressbookTests
         {
             app.Contacts.PrepareContacts(1);
             List<ContactData> oldContacts = app.Contacts.GetContactList();
+            ContactData oldContact = oldContacts[0];
 
             app.Contacts.Remove(false, new int[] {0});
 
             List<ContactData> newContacts = app.Contacts.GetContactList();
             oldContacts.RemoveAt(0);
             Assert.AreEqual(oldContacts, newContacts);
+
+            foreach (ContactData group in newContacts)
+            {
+                Assert.AreNotEqual(group.Id, oldContact.Id);
+            }
         }
     }
 }

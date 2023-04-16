@@ -25,6 +25,7 @@ namespace WebAddressbookTests
             int index = 5;
             app.Contacts.PrepareContacts(index + 1);
             List<ContactData> oldContacts = app.Contacts.GetContactList();
+            ContactData oldContact = oldContacts[index];
 
             app.Contacts.Edit(contact, index, table.Detail);
 
@@ -33,6 +34,13 @@ namespace WebAddressbookTests
             oldContacts.Sort();
             newContacts.Sort();
             Assert.AreEqual(oldContacts, newContacts);
+            foreach (ContactData group in newContacts)
+            {
+                if (group.Id == oldContact.Id)
+                {
+                    Assert.AreEqual(group.FirstName, contact.FirstName);
+                }
+            }
         }
 
         [Test]
@@ -42,6 +50,7 @@ namespace WebAddressbookTests
 
             app.Contacts.PrepareContacts(index + 1);
             List<ContactData> oldContacts = app.Contacts.GetContactList();
+            ContactData oldContact = oldContacts[index];
 
             app.Contacts.Edit(contact, index, table.Edit);
 
@@ -50,6 +59,13 @@ namespace WebAddressbookTests
             oldContacts.Sort();
             newContacts.Sort();
             Assert.AreEqual(oldContacts, newContacts);
+            foreach (ContactData group in newContacts)
+            {
+                if (group.Id == oldContact.Id)
+                {
+                    Assert.AreEqual(group.FirstName, contact.FirstName);
+                }
+            }
         }
     }
 }

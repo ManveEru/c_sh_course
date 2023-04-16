@@ -11,7 +11,7 @@ namespace WebAddressbookTests
 {
     public class ContactHelper : HelperBase
     {
-        
+        private List<ContactData> contactCache = null;
 
         public ContactHelper(ApplicationManager manager) : base(manager)
         {
@@ -51,18 +51,21 @@ namespace WebAddressbookTests
 
         public List<ContactData> GetContactList()
         {
-            List<ContactData> contacts = new List<ContactData>();
-            manager.Navigator.GoToHomePage();
-            int rowCount = driver.FindElements(By.XPath("//table[@id='maintable']/tbody/tr")).Count - 1;
-            
-            for (int i = 0; i < rowCount; i++)
+            if (contactCache == null)
             {
-                string lastName = driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (i + 2) + "]/td[2]")).Text;
-                string firstName = driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (i + 2) + "]/td[3]")).Text;
-                contacts.Add(new ContactData(firstName));
-                contacts.Last().LastName = lastName;
+                contactCache = new List<ContactData>();
+                string table = "//table[@id='maintable']/tbody/tr";
+                manager.Navigator.GoToHomePage();
+                int rowCount = driver.FindElements(By.XPath(table)).Count - 1;
+
+                for (int i = 0; i < rowCount; i++)
+                {
+                    contactCache.Add(new ContactData(driver.FindElement(By.XPath(table + "[" + (i + 2) + "]/td[3]")).Text));
+                    contactCache.Last().LastName = driver.FindElement(By.XPath(table + "[" + (i + 2) + "]/td[2]")).Text;
+                    contactCache.Last().Id = driver.FindElement(By.XPath(table + "[" + (i + 2) + "]/td[1]/input")).GetAttribute("value");
+                }
             }
-            return contacts;
+            return new List<ContactData>(contactCache);
         }
 
         public ContactHelper PrepareContacts(int index)
@@ -84,6 +87,7 @@ namespace WebAddressbookTests
         {
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             driver.SwitchTo().Alert().Accept();
+            contactCache = null;
             return this;
         }
 
@@ -116,6 +120,7 @@ namespace WebAddressbookTests
         public ContactHelper SubmitContactModification()
         {
             driver.FindElement(By.Name("update")).Click();
+            contactCache = null;
             return this;
         }
 
@@ -135,6 +140,7 @@ namespace WebAddressbookTests
         public ContactHelper SubmitContactCreate()
         {
             driver.FindElement(By.Name("submit")).Click();
+            contactCache = null;
             return this;
         }
     }

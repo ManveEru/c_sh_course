@@ -29,9 +29,11 @@ namespace WebAddressbookTests
         [Test]
         public void EmptyGroupCreationTest()
         {
-            GroupData group = new GroupData("");
-            group.Header = "";
-            group.Footer = "";
+            GroupData group = new GroupData("")
+            {
+                Header = "",
+                Footer = ""
+            };
             List<GroupData> oldGroups = app.Groups.GetGroupList();
 
             app.Groups.Create(group);
