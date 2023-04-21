@@ -30,7 +30,7 @@ namespace WebAddressbookTests
         public GroupHelper Edit(int index, GroupData newData)
         {
             manager.Navigator.GoToGroupsPage();
-            SelectGroup(index);
+            SelectGroup(index + 1);
             InitGroupModification();
             FillGroupForm(newData);
             SubmitGroupModification();
@@ -95,7 +95,7 @@ namespace WebAddressbookTests
 
         public GroupHelper SelectGroup(int index)
         {
-            driver.FindElement(By.XPath("//div[@id='content']/form/span[" + (index + 1) + "]/input")).Click();
+            driver.FindElement(By.XPath("//div[@id='content']/form/span[" + index + "]/input")).Click();
             return this;
         }
 

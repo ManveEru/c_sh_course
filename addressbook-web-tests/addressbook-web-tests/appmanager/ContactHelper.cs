@@ -12,6 +12,7 @@ namespace WebAddressbookTests
     public class ContactHelper : HelperBase
     {
         private List<ContactData> contactCache = null;
+        private string table = "//table[@id='maintable']/tbody";
 
         public ContactHelper(ApplicationManager manager) : base(manager)
         {
@@ -28,7 +29,7 @@ namespace WebAddressbookTests
 
         public ContactHelper Edit(ContactData contact, int row, int column)
         {
-            InitContactModification(row, column);
+            InitContactModification(row + 2, column);
             FillContactForm(contact);
             SubmitContactModification();
             manager.Navigator.OpenHomePageByLink();
@@ -54,15 +55,14 @@ namespace WebAddressbookTests
             if (contactCache == null)
             {
                 contactCache = new List<ContactData>();
-                string table = "//table[@id='maintable']/tbody/tr";
                 manager.Navigator.GoToHomePage();
-                int rowCount = driver.FindElements(By.XPath(table)).Count - 1;
+                int rowCount = driver.FindElements(By.XPath(table + "/tr")).Count - 1;
 
-                for (int i = 0; i < rowCount; i++)
+                for (int i = 2; i < (rowCount + 2); i++)
                 {
-                    contactCache.Add(new ContactData(driver.FindElement(By.XPath(table + "[" + (i + 2) + "]/td[3]")).Text));
-                    contactCache.Last().LastName = driver.FindElement(By.XPath(table + "[" + (i + 2) + "]/td[2]")).Text;
-                    contactCache.Last().Id = driver.FindElement(By.XPath(table + "[" + (i + 2) + "]/td[1]/input")).GetAttribute("value");
+                    contactCache.Add(new ContactData(driver.FindElement(By.XPath(GetCellLink(i, 3))).Text));
+                    contactCache.Last().LastName = driver.FindElement(By.XPath(GetCellLink(i, 2))).Text;
+                    contactCache.Last().Id = driver.FindElement(By.XPath(GetCellLink(i, 1) + "/input")).GetAttribute("value");
                 }
             }
             return new List<ContactData>(contactCache);
@@ -80,7 +80,7 @@ namespace WebAddressbookTests
         public int DifferenceContacts(int count)
         {
             manager.Navigator.GoToHomePage();
-            return driver.FindElement(By.XPath("//table[@id='maintable']/tbody")).FindElements(By.Name("selected[]")).Count - count;
+            return driver.FindElement(By.XPath(table)).FindElements(By.Name("selected[]")).Count - count;
         }
 
         public ContactHelper RemoveContact()
@@ -95,7 +95,7 @@ namespace WebAddressbookTests
         {
             foreach (var i in index)
             {
-                driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (i + 2) + "]/td[1]/input")).Click();
+                driver.FindElement(By.XPath(GetCellLink(i + 2, 1) + "/input")).Click();
             }
             return this;
         }
@@ -108,9 +108,9 @@ namespace WebAddressbookTests
 
         public ContactHelper InitContactModification(int row, int column)
         {
-            ContactTableLayout table = new ContactTableLayout();
-            driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + (row + 2) + "]/td[" + column + "]/a/img")).Click();
-            if (column == table.Detail)
+            ContactTableLayout tableLayout = new ContactTableLayout();
+            driver.FindElement(By.XPath(GetCellLink(row, column) + "/a/img")).Click();
+            if (column == tableLayout.Detail)
             {
                 driver.FindElement(By.Name("modifiy")).Click();
             }
@@ -142,6 +142,11 @@ namespace WebAddressbookTests
             driver.FindElement(By.Name("submit")).Click();
             contactCache = null;
             return this;
+        }
+
+        public string GetCellLink(int row, int column)
+        {
+            return System.String.Format("{0}/tr[{1}]/td[{2}]", table, row, column);
         }
     }
 }
