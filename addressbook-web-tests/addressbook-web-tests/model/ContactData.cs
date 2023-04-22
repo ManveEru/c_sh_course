@@ -9,6 +9,7 @@ namespace WebAddressbookTests
     public class ContactData : IEquatable<ContactData>, IComparable<ContactData>
     {
         private string allPhones;
+        private string allData;
 
         public ContactData (string firstName)
         {
@@ -49,6 +50,25 @@ namespace WebAddressbookTests
         public override string ToString()
         {
             return "First name = " + FirstName + ", last name = " + LastName;
+        }
+
+        public string AllData 
+        {
+            get 
+            {
+                return (FirstName 
+                        + (string.IsNullOrEmpty(LastName) ? "" :" " + LastName) 
+                        + "\r\n"
+                        + (string.IsNullOrEmpty(Address) ? "" : Address + "\r\n")
+                        + "\r\n"
+                        + (string.IsNullOrEmpty(HomePhone) ? "" : "H: " + HomePhone + "\r\n")
+                        + (string.IsNullOrEmpty(MobilePhone) ? "" : "M: " + MobilePhone + "\r\n")
+                        + (string.IsNullOrEmpty(WorkPhone) ? "" : "W: " + WorkPhone + "\r\n")).Trim();
+            }
+            set 
+            {
+                allData = value;
+            } 
         }
 
         public string FirstName { get; set; }
@@ -115,6 +135,7 @@ namespace WebAddressbookTests
         public string NotesSecondary { get; set; }
 
         public string Id { get; set; }
+        
         public string CleanUp(string phone)
         {
             if (phone == null || phone == "")

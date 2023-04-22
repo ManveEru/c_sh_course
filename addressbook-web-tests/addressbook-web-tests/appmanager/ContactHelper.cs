@@ -102,6 +102,13 @@ namespace WebAddressbookTests
             };
         }
 
+        public string GetContactInformationFromDetail(int index)
+        {
+            manager.Navigator.GoToHomePage();
+            InitContactModification(index + 2, 7);
+            return driver.FindElement(By.Id("content")).Text;
+        }
+
         public ContactHelper PrepareContacts(int index)
         {
             manager.Navigator.GoToHomePage();
