@@ -12,8 +12,7 @@ namespace WebAddressbookTests
     public class ContactHelper : HelperBase
     {
         private List<ContactData> contactCache = null;
-        private string table = "//table[@id='maintable']/tbody";
-
+        
         public ContactHelper(ApplicationManager manager) : base(manager)
         {
         }
@@ -29,7 +28,13 @@ namespace WebAddressbookTests
 
         public ContactHelper Edit(ContactData contact, int row, int column)
         {
+            ContactTableLayout tableLayout = new ContactTableLayout();
+
             InitContactModification(row + 2, column);
+            if (column == tableLayout.Detail)
+            {
+                driver.FindElement(By.Name("modifiy")).Click();
+            }
             FillContactForm(contact);
             SubmitContactModification();
             manager.Navigator.OpenHomePageByLink();
@@ -56,34 +61,58 @@ namespace WebAddressbookTests
             {
                 contactCache = new List<ContactData>();
                 manager.Navigator.GoToHomePage();
-                int rowCount = driver.FindElements(By.XPath(table + "/tr")).Count - 1;
+                IList<IWebElement> rows = driver.FindElements(By.Name("entry"));
 
-                for (int i = 2; i < (rowCount + 2); i++)
+                foreach (IWebElement row in rows)
                 {
-                    contactCache.Add(new ContactData(driver.FindElement(By.XPath(GetCellLink(i, 3))).Text));
-                    contactCache.Last().LastName = driver.FindElement(By.XPath(GetCellLink(i, 2))).Text;
-                    contactCache.Last().Id = driver.FindElement(By.XPath(GetCellLink(i, 1) + "/input")).GetAttribute("value");
+                    IList<IWebElement> cells = row.FindElements(By.TagName("td"));
+                    contactCache.Add(new ContactData(cells[2].Text)
+                    {
+                        LastName = cells[1].Text,
+                        Id = cells[0].FindElement(By.TagName("input")).GetAttribute("value")
+                    });
                 }
             }
             return new List<ContactData>(contactCache);
         }
 
+        public ContactData GetContactInformationFromTable(int index)
+        {
+            manager.Navigator.GoToHomePage();
+            IList<IWebElement> cells = driver.FindElements(By.Name("entry"))[index].FindElements(By.TagName("td"));
+            return new ContactData(cells[2].Text)
+            {
+                LastName = cells[1].Text,
+                Address = cells[3].Text,
+                AllPhones = cells[5].Text
+            };
+        }
+
+        public ContactData GetContactInformationFromEditForm(int index)
+        {
+            manager.Navigator.GoToHomePage();
+            InitContactModification(index + 2, 8);
+            return new ContactData(driver.FindElement(By.Name("firstname")).GetAttribute("value"))
+            {
+                LastName = driver.FindElement(By.Name("lastname")).GetAttribute("value"),
+                Address = driver.FindElement(By.Name("address")).GetAttribute("value"),
+                HomePhone = driver.FindElement(By.Name("home")).GetAttribute("value"),
+                MobilePhone = driver.FindElement(By.Name("mobile")).GetAttribute("value"),
+                WorkPhone = driver.FindElement(By.Name("work")).GetAttribute("value")
+            };
+        }
+
         public ContactHelper PrepareContacts(int index)
         {
-            int difference = DifferenceContacts(index);
+            manager.Navigator.GoToHomePage();
+            int difference = driver.FindElements(By.Name("entry")).Count - index;
 
             for (; difference < 0; difference++)
                 Create(new ContactData("Default"));
             return this;
         }
 
-        public int DifferenceContacts(int count)
-        {
-            manager.Navigator.GoToHomePage();
-            return driver.FindElement(By.XPath(table)).FindElements(By.Name("selected[]")).Count - count;
-        }
-
-        public ContactHelper RemoveContact()
+         public ContactHelper RemoveContact()
         {
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             driver.SwitchTo().Alert().Accept();
@@ -93,7 +122,7 @@ namespace WebAddressbookTests
 
         public ContactHelper SelectContact(int[] index)
         {
-            foreach (var i in index)
+            foreach (int i in index)
             {
                 driver.FindElement(By.XPath(GetCellLink(i + 2, 1) + "/input")).Click();
             }
@@ -108,12 +137,7 @@ namespace WebAddressbookTests
 
         public ContactHelper InitContactModification(int row, int column)
         {
-            ContactTableLayout tableLayout = new ContactTableLayout();
-            driver.FindElement(By.XPath(GetCellLink(row, column) + "/a/img")).Click();
-            if (column == tableLayout.Detail)
-            {
-                driver.FindElement(By.Name("modifiy")).Click();
-            }
+            driver.FindElement(By.XPath(GetCellLink(row, column) + "/a")).Click();
             return this;
         }
 
@@ -146,7 +170,7 @@ namespace WebAddressbookTests
 
         public string GetCellLink(int row, int column)
         {
-            return System.String.Format("{0}/tr[{1}]/td[{2}]", table, row, column);
+            return System.String.Format("//table[@id='maintable']/tbody/tr[{0}]/td[{1}]", row, column);
         }
     }
 }
