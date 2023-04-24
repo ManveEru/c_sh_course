@@ -10,6 +10,7 @@ namespace WebAddressbookTests
     {
         private string allPhones;
         private string allData;
+        private string allEmail;
 
         public ContactData (string firstName)
         {
@@ -59,11 +60,15 @@ namespace WebAddressbookTests
                 return (FirstName 
                         + (string.IsNullOrEmpty(LastName) ? "" :" " + LastName) 
                         + "\r\n"
-                        + (string.IsNullOrEmpty(Address) ? "" : Address + "\r\n")
+                        + GetStringOrEmpty(Address)
                         + "\r\n"
-                        + (string.IsNullOrEmpty(HomePhone) ? "" : "H: " + HomePhone + "\r\n")
-                        + (string.IsNullOrEmpty(MobilePhone) ? "" : "M: " + MobilePhone + "\r\n")
-                        + (string.IsNullOrEmpty(WorkPhone) ? "" : "W: " + WorkPhone + "\r\n")).Trim();
+                        + GetStringOrEmpty(HomePhone, "H: ")
+                        + GetStringOrEmpty(MobilePhone, "M: ")
+                        + GetStringOrEmpty(WorkPhone, "W: ")
+                        + "\r\n"
+                        + GetStringOrEmpty(Email)
+                        + GetStringOrEmpty(Email2)
+                        + GetStringOrEmpty(Email3)).Trim();
             }
             set 
             {
@@ -121,7 +126,27 @@ namespace WebAddressbookTests
         public string Email2 { get; set; }
         
         public string Email3 { get; set; }
-        
+
+        public string AllEmail 
+        {
+            get 
+            {
+                if (allEmail != null)
+                {
+                    return allEmail;
+                }
+                else
+                {
+                    return (GetStringOrEmpty(Email) + GetStringOrEmpty(Email2) + GetStringOrEmpty(Email3)).Trim();
+                }
+            }
+            
+            set
+            {
+                allEmail = value;
+            }
+        }
+
         public string Homepage { get; set; }
         
         public string Birthday { get; set; }
@@ -135,7 +160,6 @@ namespace WebAddressbookTests
         public string NotesSecondary { get; set; }
 
         public string Id { get; set; }
-        
         public string CleanUp(string phone)
         {
             if (phone == null || phone == "")
@@ -143,6 +167,18 @@ namespace WebAddressbookTests
                 return "";
             }
             return phone.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "") + "\r\n";
+        }
+
+        private string GetStringOrEmpty(string value, string label = "")
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return "";
+            }
+            else
+            {
+                return label + value + "\r\n";
+            }
         }
     }
 }

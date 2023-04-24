@@ -84,6 +84,7 @@ namespace WebAddressbookTests
             {
                 LastName = cells[1].Text,
                 Address = cells[3].Text,
+                AllEmail = cells[4].Text,
                 AllPhones = cells[5].Text
             };
         }
@@ -98,7 +99,10 @@ namespace WebAddressbookTests
                 Address = driver.FindElement(By.Name("address")).GetAttribute("value"),
                 HomePhone = driver.FindElement(By.Name("home")).GetAttribute("value"),
                 MobilePhone = driver.FindElement(By.Name("mobile")).GetAttribute("value"),
-                WorkPhone = driver.FindElement(By.Name("work")).GetAttribute("value")
+                WorkPhone = driver.FindElement(By.Name("work")).GetAttribute("value"),
+                Email = driver.FindElement(By.Name("email")).GetAttribute("value"),
+                Email2 = driver.FindElement(By.Name("email2")).GetAttribute("value"),
+                Email3 = driver.FindElement(By.Name("email3")).GetAttribute("value")
             };
         }
 
