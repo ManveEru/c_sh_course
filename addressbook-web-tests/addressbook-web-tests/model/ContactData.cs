@@ -57,18 +57,18 @@ namespace WebAddressbookTests
         {
             get 
             {
-                return (FirstName 
-                        + (string.IsNullOrEmpty(LastName) ? "" :" " + LastName) 
-                        + "\r\n"
-                        + GetStringOrEmpty(Address)
-                        + "\r\n"
-                        + GetStringOrEmpty(HomePhone, "H: ")
-                        + GetStringOrEmpty(MobilePhone, "M: ")
-                        + GetStringOrEmpty(WorkPhone, "W: ")
-                        + "\r\n"
-                        + GetStringOrEmpty(Email)
-                        + GetStringOrEmpty(Email2)
-                        + GetStringOrEmpty(Email3)).Trim();
+                string blockName = FirstName
+                                   + (string.IsNullOrEmpty(MiddleName) ? "" : " " + MiddleName)
+                                   + (string.IsNullOrEmpty(LastName) ? "" : " " + LastName)
+                                   + "\r\n"
+                                   + GetStringOrEmpty(Address);
+                string blockPhone = GetStringOrEmpty(HomePhone, "H: ")
+                                    + GetStringOrEmpty(MobilePhone, "M: ")
+                                    + GetStringOrEmpty(WorkPhone, "W: ");
+                string blockEmail = GetStringOrEmpty(Email)
+                                    + GetStringOrEmpty(Email2)
+                                    + GetStringOrEmpty(Email3);
+                return (GetStringOrEmpty(blockName) + GetStringOrEmpty(blockPhone) + GetStringOrEmpty(blockEmail)).Trim();
             }
             set 
             {

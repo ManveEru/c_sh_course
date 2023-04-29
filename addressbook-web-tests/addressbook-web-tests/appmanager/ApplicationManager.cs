@@ -12,13 +12,14 @@ namespace WebAddressbookTests
 {
     public class ApplicationManager
     {
-        protected IWebDriver driver;
-        protected string baseURL;
+        protected IWebDriver driver; //драйвер для работы с браузером
+        protected string baseURL; //основная часть адреса сайта
 
-        protected LoginHelper loginHelper;
-        protected NavigationHelper navHelper;
-        protected GroupHelper groupHelper;
-        protected ContactHelper contactHelper;
+        protected LoginHelper loginHelper; //реализует методы авторизации и выхода с сайта
+        protected NavigationHelper navHelper; //реализует методы перехода по страницам сайта
+        protected GroupHelper groupHelper; // реализует методы работы с группами
+        protected ContactHelper contactHelper; // реализует методы работы с контактами
+        //
         private static ThreadLocal<ApplicationManager> app = new ThreadLocal<ApplicationManager>();
 
         private ApplicationManager()
