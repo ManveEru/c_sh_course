@@ -12,6 +12,11 @@ namespace WebAddressbookTests
         private string allData;
         private string allEmail;
 
+        public ContactData()
+        {
+
+        }
+
         public ContactData (string firstName)
         {
             FirstName = firstName;
@@ -160,6 +165,7 @@ namespace WebAddressbookTests
         public string NotesSecondary { get; set; }
 
         public string Id { get; set; }
+
         public string CleanUp(string phone)
         {
             if (phone == null || phone == "")

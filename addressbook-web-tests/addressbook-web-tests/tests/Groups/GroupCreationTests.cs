@@ -51,7 +51,7 @@ namespace WebAddressbookTests
 
         public static IEnumerable<GroupData> GroupDataFromJsonFile()
         {
-            return JsonConvert.DeserializeObject< List<GroupData>>(File.ReadAllText(@"groups.json"));
+            return JsonConvert.DeserializeObject<List<GroupData>>(File.ReadAllText(@"groups.json"));
         }
 
         [Test, TestCaseSource("GroupDataFromJsonFile")]
