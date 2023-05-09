@@ -12,7 +12,7 @@ namespace WebAddressbookTests
     public class GroupRemovalTests : AuthTestBase
     {
         [Test]
-        public void GroupRemovalTest()
+        public void GroupsRemovalTest()
         {
             int[] removeList = {0};
 
@@ -24,6 +24,28 @@ namespace WebAddressbookTests
 
             List<GroupData> newGroups = app.Groups.GetGroupList();
             oldGroups.RemoveAt(0);
+
+            Assert.AreEqual(oldGroups, newGroups);
+
+            foreach (GroupData group in newGroups)
+            {
+                Assert.AreNotEqual(group.Id, oldGroup.Id);
+            }
+        }
+
+        [Test]
+        public void GroupRemovalTest()
+        {
+            int groupIndex = 1;
+            
+            app.Groups.PrepareGroups(groupIndex + 1);
+            List<GroupData> oldGroups = GroupData.GetAll();
+            GroupData oldGroup = oldGroups[groupIndex];
+
+            app.Groups.Remove(oldGroup.Id);
+
+            List<GroupData> newGroups = GroupData.GetAll();
+            oldGroups.RemoveAt(groupIndex);
 
             Assert.AreEqual(oldGroups, newGroups);
 

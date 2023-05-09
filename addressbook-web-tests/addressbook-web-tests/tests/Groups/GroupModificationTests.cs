@@ -14,18 +14,20 @@ namespace WebAddressbookTests
         [Test]
         public void GroupModificationTest()
         {
-            GroupData newData = new GroupData("new1");
-            newData.Header = null;
-            newData.Footer = null;
+            GroupData newData = new GroupData("new1")
+            {
+                Header = null,
+                Footer = null
+            };
             int index = 7;
             
             app.Groups.PrepareGroups(index + 1);
-            List<GroupData> oldGroups = app.Groups.GetGroupList();
+            List<GroupData> oldGroups = GroupData.GetAll();
             GroupData modifiedGroup = oldGroups[index];
 
-            app.Groups.Edit(index, newData);
+            app.Groups.Edit(modifiedGroup.Id, newData);
 
-            List<GroupData> newGroups = app.Groups.GetGroupList();
+            List<GroupData> newGroups = GroupData.GetAll();
             oldGroups[index].Name = newData.Name;
             oldGroups.Sort();
             newGroups.Sort();
