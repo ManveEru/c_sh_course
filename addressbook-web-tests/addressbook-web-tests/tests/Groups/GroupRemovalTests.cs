@@ -9,27 +9,37 @@ using NUnit.Framework;
 namespace WebAddressbookTests
 {
     [TestFixture]
-    public class GroupRemovalTests : AuthTestBase
+    public class GroupRemovalTests : GroupTestBase
     {
         [Test]
         public void GroupsRemovalTest()
         {
-            int[] removeList = {0};
+            int[] removeList = {0, 4, 5};
 
-            app.Groups.PrepareGroups(1);
-            List<GroupData> oldGroups = app.Groups.GetGroupList();
-            GroupData oldGroup = oldGroups[0];
+            app.Groups.PrepareGroups(removeList.Max() + 1);
+            List<GroupData> oldGroups = GroupData.GetAll();
+            List<GroupData> groupsToRemove = new List<GroupData>();
+            foreach(int i in removeList)
+            {
+                groupsToRemove.Add(oldGroups[i]);
+            }
 
-            app.Groups.Remove(removeList);
+            app.Groups.Remove(groupsToRemove);
 
-            List<GroupData> newGroups = app.Groups.GetGroupList();
-            oldGroups.RemoveAt(0);
+            List<GroupData> newGroups = GroupData.GetAll();
+            for (int i = removeList.Length - 1; i >= 0; i--)
+            {
+                oldGroups.RemoveAt(removeList[i]);
+            }
 
+            oldGroups.Sort();
+            newGroups.Sort();
             Assert.AreEqual(oldGroups, newGroups);
 
             foreach (GroupData group in newGroups)
             {
-                Assert.AreNotEqual(group.Id, oldGroup.Id);
+                foreach (GroupData removedGroup in groupsToRemove)
+                    Assert.AreNotEqual(group.Id, removedGroup.Id);
             }
         }
 
@@ -47,6 +57,8 @@ namespace WebAddressbookTests
             List<GroupData> newGroups = GroupData.GetAll();
             oldGroups.RemoveAt(groupIndex);
 
+            oldGroups.Sort();
+            newGroups.Sort();
             Assert.AreEqual(oldGroups, newGroups);
 
             foreach (GroupData group in newGroups)

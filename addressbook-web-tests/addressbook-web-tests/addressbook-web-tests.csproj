@@ -79,8 +79,10 @@
     <Compile Include="tests\AuthTestBase.cs" />
     <Compile Include="tests\Contacts\ContactModificationTests.cs" />
     <Compile Include="tests\Contacts\ContactRemovalTests.cs" />
+    <Compile Include="tests\Contacts\ContactTestBase.cs" />
     <Compile Include="tests\Groups\GroupModificationTests.cs" />
     <Compile Include="tests\Groups\GroupRemovalTests.cs" />
+    <Compile Include="tests\Groups\GroupTestBase.cs" />
     <Compile Include="tests\LoginTests.cs" />
     <Compile Include="tests\TestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

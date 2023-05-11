@@ -9,24 +9,58 @@ using NUnit.Framework;
 namespace WebAddressbookTests
 {
     [TestFixture]
-    public class ContactRemovalTests : AuthTestBase
+    public class ContactRemovalTests : ContactTestBase
     {
+        [Test]
+        public void ContactsRemovalTest()
+        {
+            int[] removeList = {0, 2, 5};
+            app.Contacts.PrepareContacts(removeList.Max() + 1);
+            List<ContactData> oldContacts = ContactData.GetAll();
+            List<ContactData> contactsToRemove = new List<ContactData>();
+            foreach (int i in removeList)
+            {
+                contactsToRemove.Add(oldContacts[i]);
+            }
+
+            app.Contacts.Remove(false, contactsToRemove);
+
+            List<ContactData> newContacts = ContactData.GetAll();
+            for (int i = removeList.Length - 1; i >= 0; i--)
+            {
+                oldContacts.RemoveAt(removeList[i]);
+                
+            }
+            oldContacts.Sort();
+            newContacts.Sort();
+            Assert.AreEqual(oldContacts, newContacts);
+
+            foreach (ContactData contact in newContacts)
+            {
+                foreach (ContactData removedContact in contactsToRemove)
+                    Assert.AreNotEqual(contact.Id, removedContact.Id);
+            }
+        }
+
         [Test]
         public void ContactRemovalTest()
         {
-            app.Contacts.PrepareContacts(1);
-            List<ContactData> oldContacts = app.Contacts.GetContactList();
-            ContactData oldContact = oldContacts[0];
+            int contactIndex = 2;
+            app.Contacts.PrepareContacts(contactIndex + 1);
+            List<ContactData> oldContacts = ContactData.GetAll();
+            ContactData contactToRemove = oldContacts[contactIndex];
 
-            app.Contacts.Remove(false, new int[] {0});
+            app.Contacts.Remove(contactToRemove.Id);
 
             List<ContactData> newContacts = app.Contacts.GetContactList();
-            oldContacts.RemoveAt(0);
+            oldContacts.RemoveAt(contactIndex);
+            oldContacts.Sort();
+            newContacts.Sort();
             Assert.AreEqual(oldContacts, newContacts);
 
-            foreach (ContactData group in newContacts)
+            foreach (ContactData contact in newContacts)
             {
-                Assert.AreNotEqual(group.Id, oldContact.Id);
+                Assert.AreNotEqual(contact.Id, contactToRemove.Id);
             }
         }
     }

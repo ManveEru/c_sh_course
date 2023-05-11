@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace WebAddressbookTests
 {
     [TestFixture]
-    public class ContactModificationTests : AuthTestBase
+    public class ContactModificationTests : ContactTestBase
     {
         private ContactData contact = new ContactData("New Name2");
         private ContactTableLayout table = new ContactTableLayout();
@@ -24,12 +24,12 @@ namespace WebAddressbookTests
         {
             int index = 5;
             app.Contacts.PrepareContacts(index + 1);
-            List<ContactData> oldContacts = app.Contacts.GetContactList();
+            List<ContactData> oldContacts = ContactData.GetAll();
             ContactData oldContact = oldContacts[index];
 
-            app.Contacts.Edit(contact, index, table.Detail);
+            app.Contacts.Edit(contact, oldContact.Id, table.Detail);
 
-            List<ContactData> newContacts = app.Contacts.GetContactList();
+            List<ContactData> newContacts = ContactData.GetAll();
             oldContacts[index].FirstName = contact.FirstName;
             oldContacts.Sort();
             newContacts.Sort();
@@ -49,12 +49,12 @@ namespace WebAddressbookTests
             int index = 7;
 
             app.Contacts.PrepareContacts(index + 1);
-            List<ContactData> oldContacts = app.Contacts.GetContactList();
+            List<ContactData> oldContacts = ContactData.GetAll();
             ContactData oldContact = oldContacts[index];
 
-            app.Contacts.Edit(contact, index, table.Edit);
+            app.Contacts.Edit(contact, oldContact.Id, table.Edit);
 
-            List<ContactData> newContacts = app.Contacts.GetContactList();
+            List<ContactData> newContacts = ContactData.GetAll();
             oldContacts[index].FirstName = contact.FirstName;
             oldContacts.Sort();
             newContacts.Sort();

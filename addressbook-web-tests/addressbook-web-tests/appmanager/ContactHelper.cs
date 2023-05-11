@@ -41,6 +41,56 @@ namespace WebAddressbookTests
             return this;
         }
 
+        public ContactHelper Edit(ContactData contact, string id, int column)
+        {
+            ContactTableLayout tableLayout = new ContactTableLayout();
+            int i = 1;
+            string temp = "";
+            do
+            {
+                i++;
+                temp = driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + i + "]")).FindElement(By.Name("selected[]")).GetAttribute("id");
+            } while (temp != id);
+            
+            InitContactModification(i, column);
+            if (column == tableLayout.Detail)
+            {
+                driver.FindElement(By.Name("modifiy")).Click();
+            }
+            FillContactForm(contact);
+            SubmitContactModification();
+            manager.Navigator.OpenHomePageByLink();
+            return this;
+        }
+
+        public ContactHelper Remove(bool all, List<ContactData> contactsToRemove)
+        {
+            if (all)
+            {
+                SelectContact();
+            }
+            else
+            {
+                string[] index = new string[contactsToRemove.Count];
+                for (int i = 0; i < contactsToRemove.Count; i++)
+                {
+                    index[i] = contactsToRemove[i].Id;
+                }
+                SelectContact(index);
+            }
+            RemoveContact();
+            manager.Navigator.GoToHomePage();
+            return this;
+        }
+
+        public ContactHelper Remove(string id)
+        {
+            SelectContact(id);
+            RemoveContact();
+            manager.Navigator.GoToHomePage();
+            return this;
+        }
+
         public ContactHelper Remove(bool all, int[] index)
         {
             if (all)
@@ -128,6 +178,21 @@ namespace WebAddressbookTests
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             driver.SwitchTo().Alert().Accept();
             contactCache = null;
+            return this;
+        }
+
+        public ContactHelper SelectContact(string[] index)
+        {
+            foreach (string i in index)
+            {
+                driver.FindElement(By.Id(i)).Click();
+            }
+            return this;
+        }
+
+        public ContactHelper SelectContact(string id)
+        {
+            driver.FindElement(By.Id(id)).Click();
             return this;
         }
 

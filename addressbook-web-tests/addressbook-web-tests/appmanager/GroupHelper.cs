@@ -67,6 +67,20 @@ namespace WebAddressbookTests
             return this;
         }
 
+        public GroupHelper Remove(List<GroupData> groups)
+        {
+            manager.Navigator.GoToGroupsPage();
+            string[] index = new string[groups.Count];
+            for (int i = 0; i < groups.Count; i++)
+            {
+                index[i] = groups[i].Id;
+            }
+            SelectGroup(index);
+            RemoveGroup();
+            ReturnToGroupPage();
+            return this;
+        }
+
         public List<GroupData> GetGroupList()
         {
             if (groupCache == null)
@@ -130,6 +144,15 @@ namespace WebAddressbookTests
             foreach (var i in index)
             {
                 driver.FindElement(By.XPath("//div[@id='content']/form/span[" + (i + 1) + "]/input")).Click();
+            }
+            return this;
+        }
+
+        public GroupHelper SelectGroup(string[] index)
+        {
+            foreach (var id in index)
+            {
+                driver.FindElement(By.XPath("//input[@type='checkbox' and @value='" + id + "']")).Click();
             }
             return this;
         }
