@@ -44,15 +44,8 @@ namespace WebAddressbookTests
         public ContactHelper Edit(ContactData contact, string id, int column)
         {
             ContactTableLayout tableLayout = new ContactTableLayout();
-            int i = 1;
-            string temp = "";
-            do
-            {
-                i++;
-                temp = driver.FindElement(By.XPath("//table[@id='maintable']/tbody/tr[" + i + "]")).FindElement(By.Name("selected[]")).GetAttribute("id");
-            } while (temp != id);
-            
-            InitContactModification(i, column);
+                        
+            InitContactModification(id, column);
             if (column == tableLayout.Detail)
             {
                 driver.FindElement(By.Name("modifiy")).Click();
@@ -103,6 +96,46 @@ namespace WebAddressbookTests
             }
             RemoveContact();
             return this;
+        }
+
+        public ContactHelper AddContactToGroup(ContactData contact, GroupData group)
+        {
+            manager.Navigator.GoToHomePage();
+            ClearGroupFilter();
+            SelectContact(contact.Id);
+            SelectGroupToAdd(group.Name);
+            CommitAddingContactToGroup();
+            return this;
+        }
+
+        public ContactHelper RemoveContactFromGroup(GroupData group, ContactData contact)
+        {
+            manager.Navigator.GoToHomePage();
+            SelectGroupFilter(group);
+            SelectContact(contact.Id);
+            driver.FindElement(By.Name("remove")).Click();
+            manager.Navigator.GoToHomePage();
+            return this;
+        }
+
+        private void CommitAddingContactToGroup()
+        {
+            driver.FindElement(By.Name("add")).Click();
+        }
+
+        private void SelectGroupToAdd(string name)
+        {
+            new SelectElement(driver.FindElement(By.Name("to_group"))).SelectByText(name);
+        }
+
+        private void ClearGroupFilter()
+        {
+            new SelectElement(driver.FindElement(By.Name("group"))).SelectByText("[all]");
+        }
+
+        private void SelectGroupFilter(GroupData group)
+        {
+            new SelectElement(driver.FindElement(By.Name("group"))).SelectByText(group.Name);
         }
 
         public List<ContactData> GetContactList()
@@ -214,6 +247,17 @@ namespace WebAddressbookTests
         public ContactHelper InitContactModification(int row, int column)
         {
             driver.FindElement(By.XPath(GetCellLink(row, column) + "/a")).Click();
+            return this;
+        }
+
+        public ContactHelper InitContactModification(string id, int column)
+        {
+            ContactTableLayout tableLayout = new ContactTableLayout();
+
+            if (column == tableLayout.Detail)
+                driver.FindElement(By.XPath("//a[@href='view.php?id=" + id + "']")).Click();
+            else
+                driver.FindElement(By.XPath("//a[@href='edit.php?id=" + id + "']")).Click();
             return this;
         }
 
