@@ -25,7 +25,7 @@ namespace mantis_tests
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < l; i++)
             {
-                builder.Append(Convert.ToChar(32 + Convert.ToInt32(rnd.NextDouble() * 96)));
+                builder.Append(Convert.ToChar(33 + Convert.ToInt32(rnd.NextDouble() * 89)));
             }
             return builder.ToString();
         }

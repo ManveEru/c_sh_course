@@ -12,30 +12,30 @@ namespace mantis_tests
     public class NavigationHelper : HelperBase
     {
         private string baseURL;
+        private string appVersionURL = "/mantisbt-2.25.7";
 
         public NavigationHelper (ApplicationManager manager, string baseURL) : base(manager)
         {
             this.baseURL = baseURL;
         }
 
-        //Переход на главную страницу по ссылке в главном меню
-        public void GoToHomePage()
+        public void GoToManageOverviewPage()
         {
-            if (driver.Url == baseURL + "/addressbook")
+            if (driver.Url == baseURL + appVersionURL + "/manage_overview_page.php")
             {
                 return;
             }
-            driver.FindElement(By.LinkText("home")).Click();
+            driver.FindElement(By.CssSelector("i.fa-gears")).Click();
         }
 
-        public void GoToGroupsPage()
+        public void GoToManageTab(string tab)
         {
-            if (driver.Url == baseURL + "/addressbook/group.php"
-                && IsElementPresent(By.Name("new")))
+            GoToManageOverviewPage();
+            if (driver.Url == baseURL + appVersionURL + "/" + tab)
             {
                 return;
             }
-            driver.FindElement(By.LinkText("groups")).Click();
+            driver.FindElement(By.CssSelector("a[href='" + appVersionURL + "/" + tab + "']")).Click();
         }
     }
 }

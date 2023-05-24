@@ -15,6 +15,9 @@ namespace mantis_tests
         protected IWebDriver driver;
         protected string baseURL; //основная часть адреса сайта
         protected LoginHelper auth;
+        protected NavigationHelper navigator;
+        protected ProjectManagementHelper projectManager;
+
         public RegistrationHelper Registration { get; set; }
         public FtpHelper Ftp { get; set; }
         //
@@ -28,6 +31,8 @@ namespace mantis_tests
             Registration = new RegistrationHelper(this);
             Ftp = new FtpHelper(this);
             auth = new LoginHelper(this, baseURL);
+            navigator = new NavigationHelper(this, baseURL);
+            projectManager = new ProjectManagementHelper(this);
         }
 
         ~ApplicationManager()
@@ -67,6 +72,22 @@ namespace mantis_tests
             get
             {
                 return auth;
+            }
+        }
+
+        public NavigationHelper Navigator
+        {
+            get
+            {
+                return navigator;
+            }
+        }
+
+        public ProjectManagementHelper PM
+        {
+            get
+            {
+                return projectManager;
             }
         }
     }
