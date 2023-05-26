@@ -13,7 +13,7 @@ namespace mantis_tests
         public static bool PERFORM_LONG_UI_CHECKS = true;
         public static Random rnd = new Random();
 
-        [SetUp]
+        [TestFixtureSetUp]
         public void SetupApplicationManager()
         {
             app = ApplicationManager.GetInstance();

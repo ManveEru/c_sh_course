@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using NUnit.Framework;
 
 namespace mantis_tests
@@ -13,8 +14,11 @@ namespace mantis_tests
         [TestFixtureSetUp]
         public void SetupConfig()
         {
-            app.Ftp.BackupFile("");
-            app.Ftp.Upload("", null);
+            app.Ftp.BackupFile("/config_inc.php");
+            using (Stream localFile = File.Open("config_inc.php", FileMode.Open))
+            {
+                app.Ftp.Upload("/config_inc.php", localFile);
+            }
         }
         
         [Test]
@@ -32,7 +36,7 @@ namespace mantis_tests
         [TestFixtureTearDown]
         public void RestoreConfig()
         {
-            app.Ftp.RestoreBackupFile("");
+            app.Ftp.RestoreBackupFile("/config_inc.php");
         }
     }
 }
