@@ -18,6 +18,8 @@ namespace mantis_tests
         protected NavigationHelper navigator;
         protected ProjectManagementHelper projectManager;
 
+        public JamesHelper James { get; set; }
+        public MailHelper Mail { get; set; }
         public RegistrationHelper Registration { get; set; }
         public FtpHelper Ftp { get; set; }
         //
@@ -33,6 +35,8 @@ namespace mantis_tests
             auth = new LoginHelper(this, baseURL);
             navigator = new NavigationHelper(this, baseURL);
             projectManager = new ProjectManagementHelper(this);
+            James = new JamesHelper(this);
+            Mail = new MailHelper(this);
         }
 
         ~ApplicationManager()
