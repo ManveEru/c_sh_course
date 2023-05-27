@@ -26,13 +26,18 @@ namespace mantis_tests
         {
             AccountData account = new AccountData()
             {
-                Name = "testuser4",
+                Name = "testuser5",
                 Password = "password",
-                Email = "testuser4@localhost.localdomain"
+                Email = "testuser5@localhost.localdomain"
             };
+            List<AccountData> accounts = app.Admin.GetAllAccounts();
+            AccountData existingAccount = accounts.Find(x => x.Name == account.Name);
+            if (existingAccount != null)
+                app.Admin.DeleteAccount(existingAccount);
 
             app.James.Delete(account);
             app.James.Add(account);
+
             app.Registration.Register(account);
         }
 
@@ -40,6 +45,12 @@ namespace mantis_tests
         public void RestoreConfig()
         {
             app.Ftp.RestoreBackupFile("/config_inc.php");
+        }
+
+        [Test]
+        public void TestLocators()
+        {
+            app.PM.TestLocator();
         }
     }
 }

@@ -103,8 +103,9 @@ namespace mantis_tests
 
         public void TestLocator()
         {
-            manager.Navigator.GoToManageTab("manage_proj_page.php");
-            System.Console.Out.Write(driver.FindElement(By.CssSelector("input[name=manage_proj_create_page_token] + *")).Text);
+            driver.Url = "http://localhost/mantisbt-2.25.7//manage_user_edit_page.php?user_id=4";
+            System.Console.Out.Write(driver.FindElements(By.CssSelector("input[type='submit']")).Count);
+
         }
     }
 }

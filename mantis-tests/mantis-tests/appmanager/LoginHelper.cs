@@ -28,6 +28,7 @@ namespace mantis_tests
                 }
                 Logout();
             }
+            driver.Url = baseURL + "/login_page.php";
             FillSimpleDialogue(By.Id("username"), account.Name, "Вход");
             FillSimpleDialogue(By.Id("password"), account.Password, "Вход");
         }

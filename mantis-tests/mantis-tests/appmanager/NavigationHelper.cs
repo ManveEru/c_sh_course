@@ -12,8 +12,7 @@ namespace mantis_tests
     public class NavigationHelper : HelperBase
     {
         private string baseURL;
-        private string appVersionURL = "/mantisbt-2.25.7";
-
+        
         public NavigationHelper (ApplicationManager manager, string baseURL) : base(manager)
         {
             this.baseURL = baseURL;
@@ -21,7 +20,7 @@ namespace mantis_tests
 
         public void GoToManageOverviewPage()
         {
-            if (driver.Url == baseURL + appVersionURL + "/manage_overview_page.php")
+            if (driver.Url == baseURL + "/manage_overview_page.php")
             {
                 return;
             }
@@ -31,11 +30,11 @@ namespace mantis_tests
         public void GoToManageTab(string tab)
         {
             GoToManageOverviewPage();
-            if (driver.Url == baseURL + appVersionURL + "/" + tab)
+            if (driver.Url == baseURL + "/" + tab)
             {
                 return;
             }
-            driver.FindElement(By.CssSelector("a[href='" + appVersionURL + "/" + tab + "']")).Click();
+            driver.FindElement(By.CssSelector("a[href='" + "/" + tab + "']")).Click();
         }
     }
 }
