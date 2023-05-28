@@ -34,7 +34,7 @@ namespace mantis_tests
             {
                 return;
             }
-            driver.FindElement(By.CssSelector("a[href='" + "/" + tab + "']")).Click();
+            driver.FindElement(By.CssSelector("a[href='/mantisbt-2.25.7/" + tab + "']")).Click();
         }
     }
 }

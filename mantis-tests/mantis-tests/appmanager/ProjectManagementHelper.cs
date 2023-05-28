@@ -22,7 +22,6 @@ namespace mantis_tests
             foreach (ProjectData project in projects)
             {
                 manager.Navigator.GoToManageTab("manage_proj_page.php");
-                //System.Console.Out.WriteLine(project.Name);
                 InitCreation();
                 FillCreationForm(project);
                 SubmitForm();

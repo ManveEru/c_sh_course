@@ -8,39 +8,27 @@ using NUnit.Framework;
 namespace mantis_tests
 {
     [TestFixture]
-    class ProjectCreationTests : AuthTestBase
+    class ProjectCreationTests : ProjectTestBase
     {
         [Test]
         public void ProjectCreationTest()
         {
-            List<ProjectData> oldListProjects = app.PM.GetProjecttList();
-            List<ProjectData> newProjects = new List<ProjectData>
-            {
-                new ProjectData(GenerateRandomString(10))
-            };
-            bool uniqueProjName = true;
-            do
-            {
-                foreach (ProjectData project in oldListProjects)
-                {
-                    if (project.Name == newProjects[0].Name)
-                    {
-                        newProjects[0].Name = GenerateRandomString(10);
-                        uniqueProjName = false;
-                        break;
-                    }
-                    uniqueProjName = true;
-                }
-            } while (!uniqueProjName);
+            //подготовка данных
+            AccountData account = new AccountData() { Name = "administrator", Password = "root" };
+            List<ProjectData> oldProjectsList = app.API.GetProjectsList(account);
+            List<ProjectData> addingProjects = GenerateUniqueProjectsData(0, oldProjectsList);
+            
+            //действия
+            app.PM.Create(addingProjects);
 
-            app.PM.Create(newProjects);
+            //подготовка проверок
+            List<ProjectData> newProjectsList = app.API.GetProjectsList(account);
+            oldProjectsList.Add(addingProjects[0]);
+            oldProjectsList.Sort();
+            newProjectsList.Sort();
 
-            List<ProjectData> newListProjects = app.PM.GetProjecttList();
-            oldListProjects.Add(newProjects[0]);
-            oldListProjects.Sort();
-            newListProjects.Sort();
-
-            Assert.AreEqual(oldListProjects, newListProjects);
+            //проверки
+            Assert.AreEqual(oldProjectsList, newProjectsList);
         }
 
         [Test]

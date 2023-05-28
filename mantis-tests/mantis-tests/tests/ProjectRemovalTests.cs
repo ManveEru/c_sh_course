@@ -8,46 +8,33 @@ using NUnit.Framework;
 namespace mantis_tests
 {
     [TestFixture]
-    public class ProjectRemovalTests : AuthTestBase
+    public class ProjectRemovalTests : ProjectTestBase
     {
         [Test]
         public void ProjectRemovalTest()
         {
-            int index = 4;
-            List<ProjectData> oldListProjects = app.PM.GetProjecttList();
-            List<ProjectData> newProjects = new List<ProjectData>();
-            if ((index + 1) > oldListProjects.Count)
+            //подготовка данных
+            int index = 5;
+            AccountData account = new AccountData() { Name = "administrator", Password = "root" };
+            List<ProjectData> oldProjectsList = app.API.GetProjectsList(account);
+            if ((index + 1) > oldProjectsList.Count)
             {
-                for (int i = 0; i <= (index - oldListProjects.Count); i++)
-                {
-                    bool uniqueProjName = true;
-                    newProjects.Add(new ProjectData(GenerateRandomString(10)));
-                    do
-                    {
-                        foreach (ProjectData project in oldListProjects)
-                        {
-                            if (project.Name == newProjects[i].Name)
-                            {
-                                newProjects[i].Name = GenerateRandomString(10);
-                                uniqueProjName = false;
-                                break;
-                            }
-                            uniqueProjName = true;
-                        }
-                    } while (!uniqueProjName);
-                }
-                app.PM.Create(newProjects);
-                oldListProjects = app.PM.GetProjecttList();
+                List<ProjectData>  addingProjects = GenerateUniqueProjectsData(index - oldProjectsList.Count, oldProjectsList);
+                app.API.CreateProjects(account, addingProjects);
+                oldProjectsList = app.API.GetProjectsList(account);
             }
 
+            //действия
             app.PM.Remove(index);
 
-            List<ProjectData> newListProjects = app.PM.GetProjecttList();
-            oldListProjects.RemoveAt(index);
-            oldListProjects.Sort();
-            newListProjects.Sort();
+            //подготовка проверок
+            List<ProjectData> newProjectsList = app.API.GetProjectsList(account);
+            oldProjectsList.RemoveAt(index);
+            oldProjectsList.Sort();
+            newProjectsList.Sort();
 
-            Assert.AreEqual(oldListProjects, newListProjects);
+            //проверки
+            Assert.AreEqual(oldProjectsList, newProjectsList);
         }
     }
 }

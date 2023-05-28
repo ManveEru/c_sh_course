@@ -104,6 +104,7 @@
     <Compile Include="tests\AccountCreationTests.cs" />
     <Compile Include="tests\AddNewIssue.cs" />
     <Compile Include="tests\AuthTestBase.cs" />
+    <Compile Include="tests\ProjectTestBase.cs" />
     <Compile Include="tests\ProjectCreationTests.cs" />
     <Compile Include="tests\ProjectRemovalTests.cs" />
     <Compile Include="tests\TestBase.cs" />
