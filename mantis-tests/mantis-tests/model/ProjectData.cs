@@ -46,6 +46,7 @@ namespace mantis_tests
             return "Name = " + Name;
         }
 
+        public string Id { get; set; }
         public string Name { get; set; }
         public string State { get; set; }
         public bool GlobalCat { get; set; }
