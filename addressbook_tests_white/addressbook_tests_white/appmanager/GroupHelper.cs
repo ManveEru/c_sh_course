@@ -23,59 +23,36 @@ namespace addressbook_tests_white
         public List<GroupData> GetGroupList()
         {
             List<GroupData> list = new List<GroupData>();
-            Window dialogue = OpenGroupsDialogue();
+            Window dialogue = OpenModalWindow(manager.MainWindow, "groupButton", GROUPWINTITLE);
             Tree tree = dialogue.Get<Tree>("uxAddressTreeView");
             TreeNode root = tree.Nodes[0];
             foreach(TreeNode item in root.Nodes)
             {
                 list.Add(new GroupData() { Name = item.Text });
             }
-            CloseGroupsDialogue(dialogue);
+            dialogue.Get<Button>("uxCloseAddressButton").Click();
             return list;
         }
 
         public void Add(GroupData newGroup)
         {
-            Window dialogue = OpenGroupsDialogue();
+            Window dialogue = OpenModalWindow(manager.MainWindow, "groupButton", GROUPWINTITLE);
             dialogue.Get<Button>("uxNewAddressButton").Click();
             TextBox textBox = (TextBox) dialogue.Get(SearchCriteria.ByControlType(ControlType.Edit));
             textBox.Enter(newGroup.Name);
             Keyboard.Instance.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN);
-            CloseGroupsDialogue(dialogue);
-        }
-
-        private Window OpenGroupsDialogue()
-        {
-            manager.MainWindow.Get<Button>("groupButton").Click();
-            return manager.MainWindow.ModalWindow(GROUPWINTITLE);
-        }
-
-        private void CloseGroupsDialogue(Window dialogue)
-        {
             dialogue.Get<Button>("uxCloseAddressButton").Click();
         }
-
         public void Remove(int index)
         {
-            Window groupDialogue = OpenGroupsDialogue();
+            Window groupDialogue = OpenModalWindow(manager.MainWindow, "groupButton", GROUPWINTITLE);
             Tree tree = groupDialogue.Get<Tree>("uxAddressTreeView");
             TreeNode root = tree.Nodes[0];
             root.Nodes[index].Click();
-            Window deleteGroupDilogue = OpenDeleteGroupsDialogue(groupDialogue);
+            Window deleteGroupDilogue = OpenModalWindow(groupDialogue, "uxDeleteAddressButton", DELETEGROUPWINTITLE);
             deleteGroupDilogue.Get<RadioButton>("uxDeleteAllRadioButton").Click();
-            ConfirmDeleteGroups(deleteGroupDilogue);
-            CloseGroupsDialogue(groupDialogue);
-        }
-
-        private Window OpenDeleteGroupsDialogue(Window dialogue)
-        {
-            dialogue.Get<Button>("uxDeleteAddressButton").Click();
-            return dialogue.ModalWindow(DELETEGROUPWINTITLE);
-        }
-
-        private void ConfirmDeleteGroups(Window dialogue)
-        {
-            dialogue.Get<Button>("uxOKAddressButton").Click();
+            deleteGroupDilogue.Get<Button>("uxOKAddressButton").Click();
+            groupDialogue.Get<Button>("uxCloseAddressButton").Click();
         }
     }
 }

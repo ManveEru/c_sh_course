@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace addressbook_tests_white
 {
-    public class UserData : IComparable<UserData>, IEquatable<UserData>
+    public class ContactData : IComparable<ContactData>, IEquatable<ContactData>
     {
         public string FirstName { get; set; }
 
-        public int CompareTo(UserData other)
+        public int CompareTo(ContactData other)
         {
             return this.FirstName.CompareTo(other.FirstName);
         }
 
-        public bool Equals(UserData other)
+        public bool Equals(ContactData other)
         {
             return this.FirstName.Equals(other.FirstName);
         }
